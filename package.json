@@ -4,7 +4,9 @@
   "description": "A simple TypeScript framework based upon OpenLayers that quickly allows you to develop OL app",
   "main": "./dist/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
+    "lint": "tslint -p tsconfig.json"
   },
   "repository": {
     "type": "git",
@@ -19,5 +21,21 @@
   "bugs": {
     "url": "https://github.com/Sorion/olaf/issues"
   },
-  "homepage": "https://github.com/Sorion/olaf#readme"
+  "homepage": "https://github.com/Sorion/olaf#readme",
+  "devDependencies": {
+    "@types/ol": "^4.6.2",
+    "karma": "^2.0.5",
+    "karma-chrome-launcher": "^2.2.0",
+    "karma-coverage-istanbul-reporter": "^2.0.1",
+    "karma-firefox-launcher": "^1.1.0",
+    "karma-jasmine": "^1.1.2",
+    "karma-jasmine-html-reporter": "^1.2.0",
+    "prettier": "^1.13.7",
+    "tslint": "^5.11.0",
+    "tslint-config-prettier": "^1.14.0",
+    "typescript": "^2.9.2"
+  },
+  "dependencies": {
+    "ol": "^5.1.3"
+  }
 }
