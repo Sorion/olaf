@@ -1,0 +1,23 @@
+{
+  "name": "olaf",
+  "version": "1.0.0",
+  "description": "A simple TypeScript framework based upon OpenLayers that quickly allows you to develop OL app",
+  "main": "./dist/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sorion/olaf.git"
+  },
+  "keywords": [
+    "openlayers",
+    "typescript"
+  ],
+  "author": "Sorion",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Sorion/olaf/issues"
+  },
+  "homepage": "https://github.com/Sorion/olaf#readme"
+}
