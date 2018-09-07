@@ -6,10 +6,10 @@ import Observable from 'ol/observable';
 import * as ol from 'ol';
 
 export class MeasureInteractor extends Draw {
-  private helpToolTipElement: Element;
-  private helpToolTip: ol.default.Overlay;
-  private measureToolTipElement: Element;
-  private measureToolTip: ol.default.Overlay;
+  private helpToolTipElement!: Element;
+  private helpToolTip!: ol.default.Overlay;
+  private measureToolTipElement!: Element;
+  private measureToolTip!: ol.default.Overlay;
 
   private pMap: any;
   private listener: any;
@@ -36,8 +36,8 @@ export class MeasureInteractor extends Draw {
       this.handleDrawing(evt);
     });
 
-    this.on('drawend', evt => {
-      this.handleFinish(evt);
+    this.on('drawend', () => {
+      this.handleFinish();
     });
   }
 
@@ -78,7 +78,7 @@ export class MeasureInteractor extends Draw {
     }
     this.skectch = evt.feature;
     let tooltipCoord = evt.coordinate;
-    this.listener = this.skectch.getGeometry().on('change', event => {
+    this.listener = this.skectch.getGeometry().on('change', (event: any) => {
       const geom = event.target;
       const output = this.formatLength(geom);
       tooltipCoord = geom.getLastCoordinate();
@@ -88,7 +88,7 @@ export class MeasureInteractor extends Draw {
     });
   }
 
-  public handleFinish(evt: any): void {
+  public handleFinish(): void {
     this.measureToolTipElement.className = 'tooltip tooltip-static';
     this.helpToolTipElement.innerHTML = 'Click To Start';
 
@@ -103,7 +103,7 @@ export class MeasureInteractor extends Draw {
     this.skectch = undefined;
     this.measureToolTip.setOffset([0, -7]);
     // unset tooltip so that a new one can be created
-    this.measureToolTipElement = null;
+    this.measureToolTipElement.remove();
     this.createMeasureTooltip();
     Observable.unByKey(this.listener);
     Observable.unByKey(this.mapListener);
@@ -130,7 +130,7 @@ export class MeasureInteractor extends Draw {
    * Creates a new help tooltip
    */
   public createHelpTooltip(): void {
-    if (this.helpToolTipElement) {
+    if (this.helpToolTipElement && this.helpToolTipElement.parentNode) {
       this.helpToolTipElement.parentNode.removeChild(this.helpToolTipElement);
     }
     this.helpToolTipElement = document.createElement('div');
@@ -147,7 +147,7 @@ export class MeasureInteractor extends Draw {
    * Creates a new measure tooltip
    */
   public createMeasureTooltip(): void {
-    if (this.measureToolTipElement) {
+    if (this.measureToolTipElement && this.measureToolTipElement.parentNode) {
       this.measureToolTipElement.parentNode.removeChild(this.measureToolTipElement);
     }
     this.measureToolTipElement = document.createElement('div');

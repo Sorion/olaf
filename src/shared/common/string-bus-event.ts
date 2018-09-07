@@ -4,9 +4,9 @@ import { SubscriptionPointer } from './subscription-pointer.interface';
 
 export abstract class StringBusEvent implements BusEvent<string> {
 
-    subscriptions: Dictionary<Array<any>> = {};
-    subscriptionPointers: Array<SubscriptionPointer> = [];
-    unsubscribeTokens: Array<any> = [];
+    subscriptions: Dictionary<any[]> = {};
+    subscriptionPointers: SubscriptionPointer[] = [];
+    unsubscribeTokens: any[] = [];
 
     public subscribe(eventType: string, callback: (data: any) => any): object {
         if (typeof eventType !== 'string') {

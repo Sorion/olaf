@@ -1,6 +1,6 @@
 import Feature from 'ol/feature';
 
-export interface ITransaction {
+export interface Transaction {
   feature: Feature;
   id: string;
   validateBeforeSave: boolean;

@@ -108,27 +108,4 @@ export class UpdateService extends StringBusEvent {
     delete(id: number): void {
         this.publish(UPDATE.DELETE, id);
     }
-
-    //#region adsb
-    createAdsb(data: any): void {
-        this.publish(UPDATE.CREATE_ADSB, data);
-    }
-    onCreateADSB(callback: any): object {
-        return this.subscribe(UPDATE.CREATE_ADSB, callback);
-    }
-
-    updateAdsb(data: any): void {
-        this.publish(UPDATE.UPDATE_ADSB, data);
-    }
-    onUpdateADSB(callback: any): object {
-        return this.subscribe(UPDATE.UPDATE_ADSB, callback);
-    }
-
-    deleteAdsb(id: any): void {
-        this.publish(UPDATE.DELETE_ADSB, id);
-    }
-    onDeleteADSB(callback: any): object {
-        return this.subscribe(UPDATE.DELETE_ADSB, callback);
-    }
-    //#endregion
 }

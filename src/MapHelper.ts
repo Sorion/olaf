@@ -4,7 +4,7 @@ import proj from 'ol/proj';
 import Coordinate from 'ol';
 
 export class MapHelper {
-    public static createVectorSource(features?: Array<Feature>): Vector {
+    public static createVectorSource(features?: Feature[]): Vector {
         const vector = new Vector({
             features
         });

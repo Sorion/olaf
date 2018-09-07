@@ -3,13 +3,13 @@ import FullScreen from 'ol/control/fullscreen';
 import ScaleLine from 'ol/control/scaleline';
 import View from 'ol/view';
 import Base from 'ol/layer/base';
-import { MapHelper } from '../../layout/map/services/MapHelper';
 import proj from 'ol/proj';
 import Coordinate from 'ol';
+import { MapHelper } from '../MapHelper';
 
 export class Viewport {
-  private map: Map;
-  private miniMap: Map;
+  private map!: Map;
+  private miniMap!: Map;
   private view: View;
   private readonly PARIS_COORD: Coordinate.Coordinate = [2.3488, 48.8534];
 
@@ -38,9 +38,9 @@ export class Viewport {
     });
   }
 
-  public createMap(target: string, layers?: Array<Base>): Map {
+  public createMap(target: string, layers?: Base[]): Map {
     const map = new Map({
-      target: target,
+      target,
       view: this.view,
       layers,
     });
@@ -48,7 +48,7 @@ export class Viewport {
     return this.map;
   }
 
-  public CreateMiniMap(target: string, layers?: Array<Base>): Map {
+  public CreateMiniMap(target: string, layers?: Base[]): Map {
     if (target === undefined || target.length === 0) {
       throw new Error('Error while initialize mini map, target is undefined');
     }
@@ -60,18 +60,16 @@ export class Viewport {
     return this.miniMap;
   }
 
-  public setMapTarget(target: string | undefined): void {
+  public setMapTarget(target: string | Element): void {
     this.map.setTarget(target);
   }
 
   public destroyMap(): void {
-    this.setMapTarget(undefined);
-    this.map = undefined;
+    // TODO: Unload map
   }
 
   public destroyMiniMap(): void {
-    this.miniMap.setTarget = undefined;
-    this.miniMap = undefined;
+    // TODO: Unload map
   }
 
   public destroyViewport(): void {

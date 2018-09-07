@@ -2,7 +2,7 @@ import Interaction from 'ol/interaction/interaction';
 
 import { MapInteractorCollection } from '../ol-wrapper/Interfaces/map-interactor.collection.interface';
 import { INTERACTION } from './interactions.const';
-import { ITransaction } from './ITransaction';
+import { Transaction } from './transaction.interface';
 import { MeasureInteractor } from './MeasureInteractor';
 import { InteractorOptions } from '../ol-wrapper/Interfaces/interactor-options.interface';
 import { StringBusEvent } from '../shared/common/string-bus-event';
@@ -50,14 +50,14 @@ export class InteractionsService extends StringBusEvent {
   }
 
   public setAutoDisableCallback(interactor: Interaction): void {
-    interactor.on('drawend', (evt: any) => {
+    interactor.on('drawend', () => {
       interactor.setActive(false);
     });
   }
 
   public setFinishCallback(interactorOptions: InteractorOptions): void {
     interactorOptions.interactor.on('drawend', (evt: any) => {
-      const transaction: ITransaction = {
+      const transaction: Transaction = {
         feature: evt.feature,
         id: interactorOptions.styleID,
         validateBeforeSave: interactorOptions.validateBeforeSave,

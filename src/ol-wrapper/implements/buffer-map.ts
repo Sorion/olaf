@@ -2,8 +2,8 @@ import { BaseMap } from '../Interfaces/base-map.interface';
 import Base from 'ol/layer/base';
 
 export class BufferMap implements BaseMap {
-  layers: Array<Base>;
-  interactions: Array<any>;
+  layers: Base[];
+  interactions: any[];
 
   constructor() {
     this.layers = [];
@@ -14,7 +14,7 @@ export class BufferMap implements BaseMap {
     this.layers.push(layer);
   }
 
-  public getLayers(): Array<Base> {
+  public getLayers(): Base[] {
     return this.layers;
   }
 
@@ -22,7 +22,7 @@ export class BufferMap implements BaseMap {
     this.interactions.push(interactor);
   }
 
-  public getInteractions(): Array<any> {
+  public getInteractions(): any[] {
     return this.interactions;
   }
 }

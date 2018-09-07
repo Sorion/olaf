@@ -1,7 +1,7 @@
 import Feature from 'ol/feature';
 
 export interface UpdateData {
-    missionId: number;
-    missionName: string;
+    id: number;
+    name: string;
     feature: Feature;
 }

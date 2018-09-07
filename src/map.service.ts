@@ -8,7 +8,7 @@ import { LayersService } from './layers/layers.service';
 import { LAYERS } from './layers/layers.const';
 import { INTERACTION } from './interactions/interactions.const';
 import { FeaturesService } from './features/features.service';
-import { ITransaction } from './interactions/ITransaction';
+import { Transaction } from './interactions/transaction.interface';
 import { MapState } from './states/map.states.enum';
 import { InteractorOptions } from './ol-wrapper/Interfaces/interactor-options.interface';
 import { StringBusEvent } from './shared/common/string-bus-event';
@@ -68,23 +68,12 @@ export class MapService extends StringBusEvent {
     this.updateService.onHideFeature((data: any) => {
       this.hideFeature(data);
     });
-
-    // ADSB
-    this.updateService.onCreateADSB((data: any) => {
-      this.createFeatureADSB(data);
-    });
-    this.updateService.onUpdateADSB((data: any) => {
-      this.updateFeatureADSB(data);
-    });
-    this.updateService.onDeleteADSB((data: string) => {
-      this.removeFeatureADSB(data);
-    });
   }
 
   public initBaseConfiguration(): void {
     this.serviceState = MapState.Default;
     const self = this.featuresService.InitSelfMarker();
-    this.interactionsService.onNewFeature((transaction: ITransaction) => {
+    this.interactionsService.onNewFeature((transaction: Transaction) => {
       this.onNewFeature(transaction);
     });
 
@@ -165,7 +154,7 @@ export class MapService extends StringBusEvent {
     this.featuresService.updateSelfMarker(position, heading);
   }
 
-  public onNewFeature(transaction: ITransaction): void {
+  public onNewFeature(transaction: Transaction): void {
     this.interactionsService.stopCurrentInteraction();
     this.publish(INTERACTION.INTERACTION_FINISHED, false);
     if (transaction.validateBeforeSave && this.serviceState === MapState.Interactor) {
@@ -177,7 +166,7 @@ export class MapService extends StringBusEvent {
     }
   }
 
-  public saveFeature(transaction: ITransaction): boolean {
+  public saveFeature(transaction: Transaction): boolean {
     const feature = transaction.feature;
     this.featuresService.setFeatureStyle(feature, transaction.id);
     this.layersService.addFeaturesToLayer(LAYERS.INTERACTION_LAYER, [feature]);
@@ -255,20 +244,5 @@ export class MapService extends StringBusEvent {
 
     this.layersService.removeFeature(feature);
     this.updateService.showDone(false);
-  }
-
-  // ADSB FEATURE
-  createFeatureADSB(adsb: any): void {
-    const feature = this.featuresService.createFeatureFromADSB(adsb);
-    this.layersService.showFeature(feature);
-  }
-
-  updateFeatureADSB(adsb: any): void {
-    this.featuresService.updateFeatureFromADSB(adsb);
-  }
-
-  removeFeatureADSB(id: string): void {
-    const feature = this.featuresService.removeFeaturefromADSB(id);
-    this.layersService.removeFeature(feature);
   }
 }

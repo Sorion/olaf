@@ -1,14 +1,12 @@
 import Draw from 'ol/interaction/draw';
 import Interaction from 'ol/interaction/interaction';
-import Feature from 'ol/feature';
-import Collection from 'ol/collection';
 import Map from 'ol/map';
 import { MeasureInteractor } from '../interactions/MeasureInteractor';
 import { SymbologyService } from '../symbology.service';
 import { INTERACTION } from '../interactions/interactions.const';
 
 export class OLInteractionHelper {
-  static getLineInteraction(features?: Collection<Feature>): Interaction {
+  static getLineInteraction(): Interaction {
     const draw = new Draw({
       type: 'MultiLineString',
     });
