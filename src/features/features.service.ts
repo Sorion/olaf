@@ -7,8 +7,6 @@ import { Dictionary } from '../shared/common/dictionary.interface.ts';
 import { MapHelper } from '../MapHelper';
 import { UpdateData } from '../update/update-data.interface';
 
-
-
 export class FeaturesService {
   private symbologyService: SymbologyService;
   private selfMarker!: Feature;
@@ -62,6 +60,7 @@ export class FeaturesService {
     feature = this.createFeature([data]);
     return feature;
   }
+
   public createFeature(data: any): Feature {
     const coords = this.getCoordsFromLatLonArray(data.data);
     const feature = new Feature({

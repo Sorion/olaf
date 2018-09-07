@@ -1,5 +1,7 @@
 export class GeolocationService {
 
+  // TODO: Have a simple browser tracking integration
+
   // private socket: SocketIOClient.Socket;
 
   // private sourceGPSData: Observable<Position>;
