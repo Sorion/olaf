@@ -2,7 +2,7 @@ import Point from 'ol/geom/point';
 import Feature from 'ol/feature';
 import MultiLineString from 'ol/geom/multilinestring';
 import ol from 'ol';
-import { SymbologyService } from '../symbology.service';
+import { SymbologyService } from '../symbology/symbology.service';
 import { Dictionary } from '../shared/common/dictionary.interface.ts';
 import { MapHelper } from '../MapHelper';
 import { UpdateData } from '../update/update-data.interface';

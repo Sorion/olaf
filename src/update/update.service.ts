@@ -5,107 +5,106 @@ import { UpdateData } from './update-data.interface';
 import { StringBusEvent } from '../shared/common/string-bus-event';
 
 export class UpdateService extends StringBusEvent {
+  constructor() {
+    super();
+  }
 
-    constructor() {
-        super();
-    }
+  unsubscribeService(id: object): void {
+    this.unsubscribe(id);
+  }
 
-    unsubscribeService(id: object): void {
-        this.unsubscribe(id);
-    }
+  //#region Update
+  onRequestUpdate(callback: (data: any) => void): object {
+    return this.subscribe(UPDATE.UPDATE_REQUEST, callback);
+  }
 
-    //#region Update
-    onRequestUpdate(callback: (data: any) => void): object {
-        return this.subscribe(UPDATE.UPDATE_REQUEST, callback);
-    }
+  onUpdate(callback: (data: any) => void): object {
+    return this.subscribe(UPDATE.UPDATE_START, callback);
+  }
 
-    onUpdate(callback: (data: any) => void): object {
-        return this.subscribe(UPDATE.UPDATE_START, callback);
-    }
+  onUpdateDone(callback: (data: any) => void): object {
+    return this.subscribe(UPDATE.UPDATE_DONE, callback);
+  }
 
-    onUpdateDone(callback: (data: any) => void): object {
-        return this.subscribe(UPDATE.UPDATE_DONE, callback);
-    }
+  onUpdateCanceled(callback: any): object {
+    return this.subscribe(UPDATE.UPDATE_CANCELED, callback);
+  }
 
-    onUpdateCanceled(callback: any): object {
-        return this.subscribe(UPDATE.UPDATE_CANCELED, callback);
-    }
+  update(data: any): void {
+    this.publish(UPDATE.UPDATE_START, data);
+  }
 
-    update(data: any): void {
-        this.publish(UPDATE.UPDATE_START, data);
-    }
+  requestUpdate(data: any): void {
+    this.publish(UPDATE.UPDATE_REQUEST, data);
+  }
 
-    requestUpdate(data: any): void {
-        this.publish(UPDATE.UPDATE_REQUEST, data);
-    }
+  updateDone(data: UpdateData): void {
+    this.publish(UPDATE.UPDATE_DONE, data);
+  }
 
-    updateDone(data: UpdateData): void {
-        this.publish(UPDATE.UPDATE_DONE, data);
-    }
+  updateCanceled(reason?: string): void {
+    this.publish(UPDATE.UPDATE_CANCELED, { reason });
+  }
+  //#endregion
 
-    updateCanceled(reason?: string): void {
-        this.publish(UPDATE.UPDATE_CANCELED, { reason });
-    }
-    //#endregion
+  //#region Creation
+  onCreation(callback: (data: Feature) => void): object {
+    return this.subscribe(UPDATE.CREATION_REQUEST, callback);
+  }
 
-    //#region Creation
-    onCreation(callback: (data: Feature) => void): object {
-        return this.subscribe(UPDATE.CREATION_REQUEST, callback);
-    }
+  onCreationDone(callback: (data: any) => void): object {
+    return this.subscribe(UPDATE.CREATION_DONE, callback);
+  }
 
-    onCreationDone(callback: (data: any) => void): object {
-        return this.subscribe(UPDATE.CREATION_DONE, callback);
-    }
+  onCreationCanceled(callback: any): object {
+    return this.subscribe(UPDATE.CREATION_CANCELED, callback);
+  }
 
-    onCreationCanceled(callback: any): object {
-        return this.subscribe(UPDATE.CREATION_CANCELED, callback);
-    }
+  requestCreation(feature: Feature): void {
+    this.publish(UPDATE.CREATION_REQUEST, feature);
+  }
 
-    requestCreation(feature: Feature): void {
-        this.publish(UPDATE.CREATION_REQUEST, feature);
-    }
+  creationDone(data: UpdateData): void {
+    this.publish(UPDATE.CREATION_DONE, data);
+  }
 
-    creationDone(data: UpdateData): void {
-        this.publish(UPDATE.CREATION_DONE, data);
-    }
+  cancelCreation(reason?: string): void {
+    this.publish(UPDATE.CREATION_CANCELED, reason);
+  }
+  //#endregion
 
-    cancelCreation(reason?: string): void {
-        this.publish(UPDATE.CREATION_CANCELED, reason);
-    }
-    //#endregion
+  //#region Visibility
+  showFeature(mission: any): void {
+    this.publish(UPDATE.SHOW_REQUEST, mission);
+  }
 
-    //#region Visibility
-    showFeature(mission: any): void {
-        this.publish(UPDATE.SHOW_REQUEST, mission);
-    }
+  hideFeature(mission: any): void {
+    this.publish(UPDATE.HIDE_REQUEST, mission);
+  }
 
-    hideFeature(mission: any): void {
-        this.publish(UPDATE.HIDE_REQUEST, mission);
-    }
+  onHideFeature(callback: any): object {
+    return this.subscribe(UPDATE.HIDE_REQUEST, callback);
+  }
 
-    onHideFeature(callback: any): object {
-        return this.subscribe(UPDATE.HIDE_REQUEST, callback);
-    }
+  onShowFeature(callback: any): object {
+    return this.subscribe(UPDATE.SHOW_REQUEST, callback);
+  }
 
-    onShowFeature(callback: any): object {
-        return this.subscribe(UPDATE.SHOW_REQUEST, callback);
-    }
+  showDone(value: boolean = true): void {
+    this.publish(UPDATE.SHOW_DONE, value);
+  }
 
-    showDone(value: boolean = true): void {
-        this.publish(UPDATE.SHOW_DONE, value);
-    }
+  onShowDone(callback: any): object {
+    return this.subscribe(UPDATE.SHOW_DONE, callback);
+  }
 
-    onShowDone(callback: any): object {
-        return this.subscribe(UPDATE.SHOW_DONE, callback);
-    }
+  //#endregion
 
-    //#endregion
+  onDelete(callback: any): object {
+    return this.subscribe(UPDATE.DELETE, callback);
+  }
 
-    onDelete(callback: any): object {
-        return this.subscribe(UPDATE.DELETE, callback);
-    }
-
-    delete(id: number): void {
-        this.publish(UPDATE.DELETE, id);
-    }
+  delete(id: number): void {
+    this.publish(UPDATE.DELETE, id);
+  }
 }

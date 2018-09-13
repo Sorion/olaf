@@ -81,6 +81,7 @@ export class MeasureInteractor extends Draw {
     this.listener = this.skectch.getGeometry().on('change', (event: any) => {
       const geom = event.target;
       const output = this.formatLength(geom);
+      this.skectch.set('label', output);
       tooltipCoord = geom.getLastCoordinate();
 
       this.measureToolTipElement.innerHTML = output;

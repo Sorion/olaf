@@ -2,7 +2,7 @@ import Draw from 'ol/interaction/draw';
 import Interaction from 'ol/interaction/interaction';
 import Map from 'ol/map';
 import { MeasureInteractor } from '../interactions/MeasureInteractor';
-import { SymbologyService } from '../symbology.service';
+import { SymbologyService } from '../symbology/symbology.service';
 import { INTERACTION } from '../interactions/interactions.const';
 
 export class OLInteractionHelper {

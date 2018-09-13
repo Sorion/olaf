@@ -38,7 +38,7 @@ export class Viewport {
     });
   }
 
-  public createMap(target: string, layers?: Base[]): Map {
+  public createMap(target: string | Element, layers?: Base[]): Map {
     const map = new Map({
       target,
       view: this.view,

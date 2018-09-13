@@ -4,7 +4,7 @@ import OSM from 'ol/source/osm';
 import Feature from 'ol/feature';
 
 import { LayersCollection } from '../ol-wrapper/Interfaces/layers-collection.interface';
-import { SymbologyService } from '../symbology.service';
+import { SymbologyService } from '../symbology/symbology.service';
 import { BufferMap } from '../ol-wrapper/implements/buffer-map';
 import { LAYERS } from './layers.const';
 import { VectorSource } from '../ol-wrapper/Interfaces/Export';
@@ -65,7 +65,15 @@ export class LayersService {
 
     if (useCustomSybology) {
       vectorLayer.setStyle(feature => {
-        return this.symbologyService.styles[feature.get('type')];
+        if (feature.get('type') === 'edition:measure') {
+          return this.symbologyService.styles[feature.get('type')];
+        } else {
+          const style = this.symbologyService.styleFunction[feature.get('type')];
+          if (!style) {
+            throw new Error('Style not found in symbology, check if you register all styles properly');
+          }
+          return style(feature, 0);
+        }
       });
     }
 

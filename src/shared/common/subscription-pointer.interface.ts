@@ -1,4 +1,4 @@
 export interface SubscriptionPointer {
-    eventType: string;
-    callbackIndex: number;
+  eventType: string;
+  callbackIndex: number;
 }

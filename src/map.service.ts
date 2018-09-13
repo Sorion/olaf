@@ -1,6 +1,6 @@
 import Map from 'ol/map';
 
-import { SymbologyService } from './symbology.service';
+import { SymbologyService } from './symbology/symbology.service';
 import { Viewport } from './ol-wrapper/Viewport';
 import { OLInteractionHelper } from './ol-wrapper/ol-interaction.helper';
 import { InteractionsService } from './interactions/interactions.service';
@@ -13,23 +13,16 @@ import { MapState } from './states/map.states.enum';
 import { InteractorOptions } from './ol-wrapper/Interfaces/interactor-options.interface';
 import { StringBusEvent } from './shared/common/string-bus-event';
 import { UpdateService } from './update/update.service';
-import { MapHelper } from './MapHelper';
 import { UpdateData } from './update/update-data.interface';
 
-export class MapService extends StringBusEvent {
+export default class MapService extends StringBusEvent {
   private viewport!: Viewport;
   private interactionsService!: InteractionsService;
   private layersService!: LayersService;
   private featuresService!: FeaturesService;
-  private lastPosition!: Position;
-  private isFirstPosition = true;
-  private isTracking = false;
   private serviceState!: MapState;
 
-  constructor(
-    private readonly symbologyService: SymbologyService,
-    private readonly updateService: UpdateService,
-  ) {
+  constructor(private readonly updateService: UpdateService, private readonly symbologyService: SymbologyService) {
     super();
     this.initServices();
     this.subscribeToService();
@@ -72,22 +65,18 @@ export class MapService extends StringBusEvent {
 
   public initBaseConfiguration(): void {
     this.serviceState = MapState.Default;
-    const self = this.featuresService.InitSelfMarker();
+    // const self = this.featuresService.InitSelfMarker();
     this.interactionsService.onNewFeature((transaction: Transaction) => {
       this.onNewFeature(transaction);
     });
 
     this.layersService.setServices(this.symbologyService, this.updateService);
     this.layersService.createDefaultRasterLayer();
-    this.layersService.addVectorLayer(LAYERS.SELF_LAYER, true, true, [self]);
+    // this.layersService.addVectorLayer(LAYERS.SELF_LAYER, true, true, [self]);
     this.layersService.addVectorLayer(LAYERS.INTERACTION_LAYER, true, true);
   }
 
-  public onInteractorFinish(callback: any): object {
-    return this.subscribe(INTERACTION.INTERACTION_FINISHED, callback);
-  }
-
-  public createMap(target: string, extendControl: boolean = false): Map {
+  public createMap(target: string | Element, extendControl: boolean = false): Map {
     const baseMap = this.layersService.getBaseMap();
     const map = this.viewport.createMap(target, baseMap.getLayers());
 
@@ -134,32 +123,14 @@ export class MapService extends StringBusEvent {
     this.viewport.destroyMap();
   }
 
-  public updatePosition(position: Position): void {
-    this.lastPosition = position;
-    let heading = 0;
-    if (!this.isTracking) {
-      heading = position.coords.heading as number;
-      const mapAngleDeg = MapHelper.convertRadToDegree(this.viewport.getRotation());
-      heading += mapAngleDeg;
-    }
-    if (this.isFirstPosition) {
-      this.viewport.centerOn(position, 15);
-      this.isFirstPosition = false;
-    }
-    if (this.isTracking) {
-      let mapHeading = position.coords.heading;
-      mapHeading = MapHelper.minimizeRotationDegree(mapHeading as number);
-      this.viewport.centerOn(position, 15, mapHeading);
-    }
-    this.featuresService.updateSelfMarker(position, heading);
-  }
-
+  //#region Feature
   public onNewFeature(transaction: Transaction): void {
     this.interactionsService.stopCurrentInteraction();
     this.publish(INTERACTION.INTERACTION_FINISHED, false);
     if (transaction.validateBeforeSave && this.serviceState === MapState.Interactor) {
       const feature = transaction.feature;
       this.featuresService.setFeatureStyle(feature, transaction.id);
+      this.saveFeature(transaction);
       this.updateService.requestCreation(feature);
     } else {
       this.saveFeature(transaction);
@@ -167,7 +138,9 @@ export class MapService extends StringBusEvent {
   }
 
   public saveFeature(transaction: Transaction): boolean {
+    const id = 'Feature: ' + Math.floor(Math.random() * 100 + 1).toString();
     const feature = transaction.feature;
+    feature.setId(id);
     this.featuresService.setFeatureStyle(feature, transaction.id);
     this.layersService.addFeaturesToLayer(LAYERS.INTERACTION_LAYER, [feature]);
     this.serviceState = MapState.Default;
@@ -175,11 +148,30 @@ export class MapService extends StringBusEvent {
     return true;
   }
 
-  public saveFeatureWithMission(data: UpdateData): void {
+  public saveFeatureWithName(data: UpdateData): void {
     this.featuresService.saveFeature(data);
     this.serviceState = MapState.Default;
     this.publish(INTERACTION.INTERACTION_FINISHED, false);
   }
+
+  showFeature(data: any): void {
+    const feature = this.featuresService.getOrCreateFeature(data);
+    this.layersService.showFeature(feature);
+    this.updateService.showDone(true);
+  }
+
+  hideFeature(data: any): void {
+    const feature = this.featuresService.getFeature(data.id);
+
+    if (!feature) {
+      return;
+    }
+
+    this.layersService.removeFeature(feature);
+    this.updateService.showDone(false);
+  }
+  //#endregion
+  //#region Interactor
 
   public activateInteractor(value: string): boolean {
     if (this.serviceState === MapState.Interactor) {
@@ -198,16 +190,14 @@ export class MapService extends StringBusEvent {
     this.serviceState = MapState.Default;
   }
 
-  public setTracking(): void {
-    this.isTracking = !this.isTracking;
-    if (!this.isTracking) {
-      this.viewport.centerOn(this.lastPosition, 15);
-    }
+  public onInteractorFinish(callback: any): object {
+    return this.subscribe(INTERACTION.INTERACTION_FINISHED, callback);
   }
 
-  // Section UpdateService
+  //#endregion
+  //#region UpdateService
   public onCreation(data: UpdateData): void {
-    this.saveFeatureWithMission(data);
+    this.saveFeatureWithName(data);
   }
 
   public cancelCreation(): void {
@@ -227,22 +217,5 @@ export class MapService extends StringBusEvent {
     };
     this.updateService.update(options);
   }
-
-  // Show Hide Binding
-  showFeature(mission: any): void {
-    const feature = this.featuresService.getOrCreateFeature(mission);
-    this.layersService.showFeature(feature);
-    this.updateService.showDone(true);
-  }
-
-  hideFeature(mission: any): void {
-    const feature = this.featuresService.getFeature(mission.id);
-
-    if (!feature) {
-      return;
-    }
-
-    this.layersService.removeFeature(feature);
-    this.updateService.showDone(false);
-  }
+  //#endregion
 }
