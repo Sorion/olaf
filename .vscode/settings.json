@@ -1,0 +1,7 @@
+{
+    "editor.renderWhitespace": "selection",
+    "npm.packageManager": "npm",
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": true
+    },
+}
