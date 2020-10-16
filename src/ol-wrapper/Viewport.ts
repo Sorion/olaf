@@ -3,15 +3,15 @@ import FullScreen from 'ol/control/fullscreen';
 import ScaleLine from 'ol/control/scaleline';
 import View from 'ol/view';
 import Base from 'ol/layer/base';
-import proj from 'ol/proj';
-import Coordinate from 'ol';
+import * as proj from 'ol/proj';
+import { Coordinate } from 'ol/coordinate';
 import { MapHelper } from '../MapHelper';
 
 export class Viewport {
   private map!: Map;
   private miniMap!: Map;
   private view: View;
-  private readonly PARIS_COORD: Coordinate.Coordinate = [2.3488, 48.8534];
+  private readonly PARIS_COORD: Coordinate = [2.3488, 48.8534];
 
   constructor() {
     this.view = new View({
@@ -28,7 +28,7 @@ export class Viewport {
     return this.view.getRotation();
   }
 
-  public centerOn(position: Position, zoom: number = 6, heading: number = 0) {
+  public centerOn(position: Position, zoom = 6, heading = 0) {
     const coord = MapHelper.convertPostionToCoord(position);
     const rotation = MapHelper.convertDegreeToRad(heading);
     this.view.animate({
@@ -38,7 +38,7 @@ export class Viewport {
     });
   }
 
-  public createMap(target: string | Element, layers?: Base[]): Map {
+  public createMap(target: string | HTMLElement, layers?: Base[]): Map {
     const map = new Map({
       target,
       view: this.view,
@@ -60,7 +60,7 @@ export class Viewport {
     return this.miniMap;
   }
 
-  public setMapTarget(target: string | Element): void {
+  public setMapTarget(target: string | HTMLElement): void {
     this.map.setTarget(target);
   }
 

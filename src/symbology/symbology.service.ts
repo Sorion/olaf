@@ -6,8 +6,8 @@ import Icon from 'ol/style/icon';
 import Stroke from 'ol/style/stroke';
 import Style from 'ol/style/Style';
 import Text from 'ol/style/text';
-
-import ol from 'ol';
+import { StyleFunction } from 'ol/style/Style';
+import RenderFeature from 'ol/render/Feature';
 import { createLabelFromFeature } from './symbology.utils';
 
 interface StylesMap {
@@ -15,7 +15,7 @@ interface StylesMap {
 }
 
 interface StyleFunctionsMap {
-  [key: string]: ol.StyleFunction;
+  [key: string]: StyleFunction;
 }
 
 export class SymbologyService {
@@ -40,14 +40,13 @@ export class SymbologyService {
     // this.registerDefaultLineStyleFunction();
   }
 
-  public addStyleFunction(id: string, func: ol.StyleFunction): void {
+  public addStyleFunction(id: string, func: StyleFunction): void {
     this.styleFunction[id] = func;
   }
 
   public registerDefaultMarker(): void {
     const image = new Icon({
       scale: 0.3,
-      snapToPixel: false,
       src: '../../assets/img/marker.png',
     });
     const style = new Style({
@@ -60,7 +59,6 @@ export class SymbologyService {
   public registerDefaultPlane(): void {
     const image = new Icon({
       scale: 0.3,
-      snapToPixel: false,
       src: '../../assets/img/plane.png',
     });
     const style = new Style({
@@ -74,7 +72,6 @@ export class SymbologyService {
     const image = new Icon({
       rotation: heading,
       scale: 0.3,
-      snapToPixel: false,
       src: '../../assets/img/plane.png',
     });
     const style = new Style({
@@ -172,7 +169,7 @@ export class SymbologyService {
   }
 
   public registerDefaultLineMeasureFunction(): void {
-    const line = (feature: Feature | ol.render.Feature, resolution?: any) => {
+    const line = (feature: Feature | RenderFeature, resolution?: any) => {
       console.log(resolution);
       const styles = [
         new Style({

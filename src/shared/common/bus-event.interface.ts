@@ -5,7 +5,7 @@ export interface BusEvent<T> {
   subscriptions: Dictionary<any[]>;
   subscriptionPointers: SubscriptionPointer[];
   unsubscribeTokens: any[];
-  subscribe: (eventType: T, callback: (data: any) => any) => object;
-  unsubscribe: (token: object) => void;
+  subscribe: (eventType: T, callback: (data: any) => any) => any;
+  unsubscribe: (token: any) => void;
   publish: (eventType: T, data: any) => any;
 }

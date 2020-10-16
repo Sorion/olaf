@@ -30,7 +30,7 @@ export class LayersService {
   }
 
   public registerEvent(): void {
-    this.updateService.onCreation(data => {
+    this.updateService.onCreation((data) => {
       const feature = data;
       this.addTempFeatures([feature]);
     });
@@ -48,23 +48,17 @@ export class LayersService {
     return this.baseMap;
   }
 
-  public addVectorLayer(
-    id: string,
-    baseMap: boolean = false,
-    useCustomSybology: boolean = false,
-    features?: Feature[],
-  ): void {
+  public addVectorLayer(id: string, baseMap = false, useCustomSybology = false, features?: Feature[]): void {
     const vectorSource = MapHelper.createVectorSource(features);
-    let vectorLayer: Vector;
 
-    vectorLayer = new Vector({
+    const vectorLayer = new Vector({
       source: vectorSource,
       updateWhileAnimating: true,
       updateWhileInteracting: true,
     });
 
     if (useCustomSybology) {
-      vectorLayer.setStyle(feature => {
+      vectorLayer.setStyle((feature) => {
         if (feature.get('type') === 'edition:measure') {
           return this.symbologyService.styles[feature.get('type')];
         } else {

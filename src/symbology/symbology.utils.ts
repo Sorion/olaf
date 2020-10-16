@@ -1,14 +1,13 @@
 import Feature from 'ol/feature';
 import Fill from 'ol/style/fill';
 import Text from 'ol/style/text';
-
-import ol from 'ol';
+import RenderFeature from 'ol/render/Feature';
 
 // http://stackoverflow.com/questions/14484787/wrap-text-in-javascript
 export default function stringDivider(str: string, width: number, spaceReplacer: string): string {
   if (str.length > width) {
     let p = width;
-    while (p > 0 && (str[p] !== ' ' && str[p] !== '-')) {
+    while (p > 0 && str[p] !== ' ' && str[p] !== '-') {
       p--;
     }
     if (p > 0) {
@@ -25,7 +24,7 @@ export default function stringDivider(str: string, width: number, spaceReplacer:
   return str;
 }
 
-export function createLabelFromFeature(feature: Feature | ol.render.Feature): Text {
+export function createLabelFromFeature(feature: Feature | RenderFeature): Text {
   const feature2 = feature as Feature;
   let text: string;
   if (feature2.get('label')) {

@@ -1,7 +1,7 @@
 import Point from 'ol/geom/point';
 import Feature from 'ol/feature';
 import MultiLineString from 'ol/geom/multilinestring';
-import ol from 'ol';
+import { Coordinate } from 'ol/coordinate';
 import { SymbologyService } from '../symbology/symbology.service';
 import { Dictionary } from '../shared/common/dictionary.interface.ts';
 import { MapHelper } from '../MapHelper';
@@ -28,7 +28,7 @@ export class FeaturesService {
     return this.selfMarker;
   }
 
-  public updateSelfMarker(position: Position, heading: number = 0): void {
+  public updateSelfMarker(position: Position, heading = 0): void {
     const convertedCoord = MapHelper.convertPostionToCoord(position);
     this.selfMarker.setGeometry(new Point(convertedCoord));
     const radian = MapHelper.convertDegreeToRad(heading);
@@ -72,11 +72,11 @@ export class FeaturesService {
     return feature;
   }
 
-  public getCoordsFromLatLonArray(data: any[]): ol.Coordinate[][] {
-    const coords: ol.Coordinate[][] = [[]];
+  public getCoordsFromLatLonArray(data: any[]): Coordinate[][] {
+    const coords: Coordinate[][] = [[]];
     for (let index = 0; index < data.length; index++) {
       const step = data[index];
-      const singleCoord = [step.longitude, step.latitude] as ol.Coordinate;
+      const singleCoord = [step.longitude, step.latitude] as Coordinate;
       coords[0].push(singleCoord);
     }
     return coords;

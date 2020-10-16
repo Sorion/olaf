@@ -38,7 +38,7 @@ export default class MapService extends StringBusEvent {
   }
 
   public subscribeToService(): void {
-    this.updateService.onCreationDone(data => {
+    this.updateService.onCreationDone((data) => {
       this.onCreation(data);
     });
 
@@ -50,7 +50,7 @@ export default class MapService extends StringBusEvent {
       this.onDelete(id);
     });
 
-    this.updateService.onRequestUpdate(data => {
+    this.updateService.onRequestUpdate((data) => {
       this.requestUpdate(data);
     });
 
@@ -76,7 +76,7 @@ export default class MapService extends StringBusEvent {
     this.layersService.addVectorLayer(LAYERS.INTERACTION_LAYER, true, true);
   }
 
-  public createMap(target: string | Element, extendControl: boolean = false): Map {
+  public createMap(target: string | HTMLElement, extendControl = false): Map {
     const baseMap = this.layersService.getBaseMap();
     const map = this.viewport.createMap(target, baseMap.getLayers());
 
@@ -190,7 +190,7 @@ export default class MapService extends StringBusEvent {
     this.serviceState = MapState.Default;
   }
 
-  public onInteractorFinish(callback: any): object {
+  public onInteractorFinish(callback: any): any {
     return this.subscribe(INTERACTION.INTERACTION_FINISHED, callback);
   }
 

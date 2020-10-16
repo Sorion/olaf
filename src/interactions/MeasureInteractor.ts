@@ -1,15 +1,17 @@
 import Map from 'ol/map';
 import Draw from 'ol/interaction/draw';
-import Overlay from 'ol/overlay';
-import Sphere from 'ol/sphere';
-import Observable from 'ol/observable';
-import * as ol from 'ol';
+import Overlay from 'ol/Overlay';
+import MapBrowserEvent from 'ol/MapBrowserEvent';
+import LineString from 'ol/geom/LineString';
+import OverlayPositioning from 'ol/OverlayPositioning';
+import * as Sphere from 'ol/sphere';
+import { unByKey } from 'ol/Observable';
 
 export class MeasureInteractor extends Draw {
-  private helpToolTipElement!: Element;
-  private helpToolTip!: ol.default.Overlay;
-  private measureToolTipElement!: Element;
-  private measureToolTip!: ol.default.Overlay;
+  private helpToolTipElement!: HTMLElement;
+  private helpToolTip!: Overlay;
+  private measureToolTipElement!: HTMLElement;
+  private measureToolTip!: Overlay;
 
   private pMap: any;
   private listener: any;
@@ -25,14 +27,14 @@ export class MeasureInteractor extends Draw {
     this.pMap = value;
   }
 
-  constructor(options: ol.default.olx.interaction.DrawOptions, map: Map, selfDistroy: boolean = true) {
+  constructor(options: any, map: Map, selfDistroy = true) {
     super(options);
 
     this.map = map;
 
     this.selfDistroy = selfDistroy;
 
-    this.on('drawstart', evt => {
+    this.on('drawstart', (evt) => {
       this.handleDrawing(evt);
     });
 
@@ -45,8 +47,8 @@ export class MeasureInteractor extends Draw {
     this.createHelpTooltip();
     this.createMeasureTooltip();
 
-    this.mapListener = this.map.on('pointermove', evt => {
-      this.pointerMoveHandler(evt as ol.default.MapBrowserEvent);
+    this.mapListener = this.map.on('pointermove', (evt) => {
+      this.pointerMoveHandler(evt as MapBrowserEvent);
     });
   }
 
@@ -58,7 +60,7 @@ export class MeasureInteractor extends Draw {
     this.setActive(value);
   }
 
-  public pointerMoveHandler(evt: ol.default.MapBrowserEvent): void {
+  public pointerMoveHandler(evt: MapBrowserEvent): void {
     if (evt.dragging) {
       return;
     }
@@ -106,8 +108,8 @@ export class MeasureInteractor extends Draw {
     // unset tooltip so that a new one can be created
     this.measureToolTipElement.remove();
     this.createMeasureTooltip();
-    Observable.unByKey(this.listener);
-    Observable.unByKey(this.mapListener);
+    unByKey(this.listener);
+    unByKey(this.mapListener);
     this.map.removeOverlay(this.helpToolTip);
   }
 
@@ -116,7 +118,7 @@ export class MeasureInteractor extends Draw {
    * @param {ol.geom.LineString} line The line.
    * @return {string} The formatted length.
    */
-  public formatLength(line: ol.default.geom.LineString): string {
+  public formatLength(line: LineString): string {
     const length = Sphere.getLength(line);
     let output: string;
     if (length > 100) {
@@ -139,7 +141,7 @@ export class MeasureInteractor extends Draw {
     this.helpToolTip = new Overlay({
       element: this.helpToolTipElement,
       offset: [15, 0],
-      positioning: 'center-left',
+      positioning: OverlayPositioning.CENTER_LEFT,
     });
     this.map.addOverlay(this.helpToolTip);
   }
@@ -156,7 +158,7 @@ export class MeasureInteractor extends Draw {
     this.measureToolTip = new Overlay({
       element: this.measureToolTipElement,
       offset: [0, -15],
-      positioning: 'bottom-center',
+      positioning: OverlayPositioning.BOTTOM_CENTER,
     });
     this.map.addOverlay(this.measureToolTip);
   }

@@ -1,7 +1,7 @@
 import Vector from 'ol/source/vector';
 import Feature from 'ol/feature';
-import proj from 'ol/proj';
-import Coordinate from 'ol';
+import * as proj from 'ol/proj';
+import { Coordinate } from 'ol/coordinate';
 
 export class MapHelper {
   public static createVectorSource(features?: Feature[]): Vector {
@@ -38,17 +38,17 @@ export class MapHelper {
     return -angle;
   }
 
-  public static convertPostionToCoord(position: Position): Coordinate.Coordinate {
+  public static convertPostionToCoord(position: Position): Coordinate {
     const long = position.coords.longitude;
     const lat = position.coords.latitude;
-    const coord: Coordinate.Coordinate = [long, lat];
+    const coord: Coordinate = [long, lat];
     const convertedCoord = proj.fromLonLat(coord);
 
     return convertedCoord;
   }
 
-  public static convertLatLonToOL(lat: number, lon: number): Coordinate.Coordinate {
-    const coord = [lon, lat] as Coordinate.Coordinate;
+  public static convertLatLonToOL(lat: number, lon: number): Coordinate {
+    const coord = [lon, lat] as Coordinate;
     return proj.fromLonLat(coord);
   }
 }

@@ -9,24 +9,24 @@ export class UpdateService extends StringBusEvent {
     super();
   }
 
-  unsubscribeService(id: object): void {
+  unsubscribeService(id: any): void {
     this.unsubscribe(id);
   }
 
   //#region Update
-  onRequestUpdate(callback: (data: any) => void): object {
+  onRequestUpdate(callback: (data: any) => void): any {
     return this.subscribe(UPDATE.UPDATE_REQUEST, callback);
   }
 
-  onUpdate(callback: (data: any) => void): object {
+  onUpdate(callback: (data: any) => void): any {
     return this.subscribe(UPDATE.UPDATE_START, callback);
   }
 
-  onUpdateDone(callback: (data: any) => void): object {
+  onUpdateDone(callback: (data: any) => void): any {
     return this.subscribe(UPDATE.UPDATE_DONE, callback);
   }
 
-  onUpdateCanceled(callback: any): object {
+  onUpdateCanceled(callback: any): any {
     return this.subscribe(UPDATE.UPDATE_CANCELED, callback);
   }
 
@@ -48,15 +48,15 @@ export class UpdateService extends StringBusEvent {
   //#endregion
 
   //#region Creation
-  onCreation(callback: (data: Feature) => void): object {
+  onCreation(callback: (data: Feature) => void): any {
     return this.subscribe(UPDATE.CREATION_REQUEST, callback);
   }
 
-  onCreationDone(callback: (data: any) => void): object {
+  onCreationDone(callback: (data: any) => void): any {
     return this.subscribe(UPDATE.CREATION_DONE, callback);
   }
 
-  onCreationCanceled(callback: any): object {
+  onCreationCanceled(callback: any): any {
     return this.subscribe(UPDATE.CREATION_CANCELED, callback);
   }
 
@@ -82,25 +82,25 @@ export class UpdateService extends StringBusEvent {
     this.publish(UPDATE.HIDE_REQUEST, mission);
   }
 
-  onHideFeature(callback: any): object {
+  onHideFeature(callback: any): any {
     return this.subscribe(UPDATE.HIDE_REQUEST, callback);
   }
 
-  onShowFeature(callback: any): object {
+  onShowFeature(callback: any): any {
     return this.subscribe(UPDATE.SHOW_REQUEST, callback);
   }
 
-  showDone(value: boolean = true): void {
+  showDone(value = true): void {
     this.publish(UPDATE.SHOW_DONE, value);
   }
 
-  onShowDone(callback: any): object {
+  onShowDone(callback: any): any {
     return this.subscribe(UPDATE.SHOW_DONE, callback);
   }
 
   //#endregion
 
-  onDelete(callback: any): object {
+  onDelete(callback: any): any {
     return this.subscribe(UPDATE.DELETE, callback);
   }
 

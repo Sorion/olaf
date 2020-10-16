@@ -7,7 +7,7 @@ export abstract class StringBusEvent implements BusEvent<string> {
   subscriptionPointers: SubscriptionPointer[] = [];
   unsubscribeTokens: any[] = [];
 
-  public subscribe(eventType: string, callback: (data: any) => any): object {
+  public subscribe(eventType: string, callback: (data: any) => any): any {
     if (typeof eventType !== 'string') {
       throw new Error('Event type must be a string');
     }
@@ -29,7 +29,7 @@ export abstract class StringBusEvent implements BusEvent<string> {
     return unsubscribeToken;
   }
 
-  public unsubscribe(token: object): void {
+  public unsubscribe(token: any): void {
     const subscriptionPointer = this.subscriptionPointers[this.unsubscribeTokens.indexOf(token)];
     this.subscriptions[subscriptionPointer.eventType][subscriptionPointer.callbackIndex] = null;
   }

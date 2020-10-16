@@ -4,11 +4,12 @@ import Map from 'ol/map';
 import { MeasureInteractor } from '../interactions/MeasureInteractor';
 import { SymbologyService } from '../symbology/symbology.service';
 import { INTERACTION } from '../interactions/interactions.const';
+import GeometryType from 'ol/geom/GeometryType';
 
 export class OLInteractionHelper {
   static getLineInteraction(): Interaction {
     const draw = new Draw({
-      type: 'MultiLineString',
+      type: GeometryType.MULTI_LINE_STRING,
     });
     draw.setActive(false);
     return draw;
@@ -16,17 +17,13 @@ export class OLInteractionHelper {
 
   static getPointMInteraction(): Interaction {
     const draw = new Draw({
-      type: 'Point',
+      type: GeometryType.POINT,
     });
     draw.setActive(false);
     return draw;
   }
 
-  static getMeasureInteraction(
-    symbologyService: SymbologyService,
-    map: Map,
-    autoDisable: boolean = true,
-  ): MeasureInteractor {
+  static getMeasureInteraction(symbologyService: SymbologyService, map: Map, autoDisable = true): MeasureInteractor {
     const style = symbologyService.getStyleByName(INTERACTION.EDITION_MEASURE);
     const draw = new MeasureInteractor(
       {

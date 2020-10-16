@@ -41,11 +41,11 @@ export class InteractionsService extends StringBusEvent {
     interactor.interactor.setActive(false);
   }
 
-  public onNewInteractor(callback: any): object {
+  public onNewInteractor(callback: any): any {
     return this.subscribe(INTERACTION.NEW_INTERACTOR, callback);
   }
 
-  public onNewFeature(callback: any): object {
+  public onNewFeature(callback: any): any {
     return this.subscribe(INTERACTION.INTERACTION_FINISHED, callback);
   }
 
